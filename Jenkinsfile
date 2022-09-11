@@ -23,11 +23,12 @@ pipeline {
       }
       stage('Docker build & push') {
          steps {
-             sh 'printenv'
-             docker.withRegistry(https://hub.docker.com/, docker-hub)
-             sh 'docker build -t pathanp19/devsecops-numeric-app:""$GIT_COMMIT"" .'
-             sh 'docker push pathanp19/devsecops-numeric-app:""$GIT_COMMIT""'
-            }
+             docker.withRegistry(https://hub.docker.com/, docker-hub) {
+                 sh 'printenv'
+                 sh 'docker build -t pathanp19/devsecops-numeric-app:""$GIT_COMMIT"" .'
+                 sh 'docker push pathanp19/devsecops-numeric-app:""$GIT_COMMIT""'
+                 }
+             }
          }
       }
 }
