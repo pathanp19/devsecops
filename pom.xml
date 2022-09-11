@@ -52,7 +52,7 @@
 				<executions>
 				 <execution>
 				  <goals>
-				   <goal›prepare-agent</goal>
+				   <goal>prepare-agent</goal>
 				  </goals>
 				 </execution>
 				 <execution>
