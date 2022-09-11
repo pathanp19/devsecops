@@ -8,6 +8,8 @@ pipeline {
               archive 'target/*.jar'
             }
         }
+
+
       stage('Unit Tests') {
           steps {
             sh "mvn test"
@@ -18,5 +20,6 @@ pipeline {
               jacoco execPattern: 'target/jacoco.exec'
             }
           }
+
     }
 }
