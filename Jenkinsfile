@@ -21,6 +21,16 @@ pipeline {
             }
           }
       }
+      stage('Mutation Tests') {
+          steps {
+            sh "mvn org.pitest:pitest-maven:mutationCoverage"
+          }
+          post {
+            always {
+              pimutation mutationStatsFile: '**/target/pit-reports/*/mutations.xml'
+            }
+          }
+      }
       stage('Docker build & push') {
          steps {
              withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
