@@ -5,6 +5,11 @@
       "taskLabel": "task-devsecops",
       "appliesTo": "/",
       "type": "launch"
+    },
+    {
+      "taskLabel": "task-devsecops",
+      "appliesTo": "/",
+      "type": "launch"
     }
   ]
 }
