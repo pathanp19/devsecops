@@ -12,6 +12,7 @@ pipeline {
 
       stage('Unit Tests') {
           steps {
+            sh "mvn -version"
             sh "mvn test"
           }
           post {
@@ -33,7 +34,8 @@ pipeline {
       }
       stage('Sonarqube SAST') {
           steps {
-            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric -Dsonar.host.url=http://devsecops-demokhan.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_818f775044207e01232cffc188b4f706dffdf0b2"
+            sh "java -version"
+            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric -Dsonar.host.url=http://devsecops-demokhan.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_818f775044207e01232cffc188b4f706dffdf0b2 -Dsonar.login=admin -Dsonar.password=admin123"
           }
           
       }
