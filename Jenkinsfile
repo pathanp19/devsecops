@@ -34,10 +34,14 @@ pipeline {
       }
       stage('Sonarqube SAST') {
           steps {
-            sh "java -version"
+              withSonarQubeEnv('SonarQube')
             sh "mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-numeric -Dsonar.host.url=http://devsecops-demokhan.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_4f7d74b93e14cb69f1eb550a33b9684ef3f1d5a9 -Dsonar.login=admin -Dsonar.password=admin123"
           }
-          
+          timeout(time: 2, unit: 'MINUTES'){
+            script {
+              waitForQualityGate abortPipeline: true
+            }
+          }
       }
       stage('Docker build & push') {
          steps {
