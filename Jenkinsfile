@@ -35,7 +35,7 @@ pipeline {
       stage('Sonarqube SAST') {
               steps {
                   withSonarQubeEnv('SonarQube') {
-                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric -Dsonar.host.url=http://devsecops-demokhan.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_83f119205eb297688886b13dcc2fea055c54a20e -Dsonar.login=admin -Dsonar.password=admin123"
+                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric -Dsonar.host.url=http://devsecops-demokhan.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_83f119205eb297688886b13dcc2fea055c54a20e"
                   }
                   timeout(time: 2, unit: 'MINUTES') {
                     script {
@@ -43,6 +43,16 @@ pipeline {
                     }
                   }
           }
+      }
+      stage('Vulnerability Scan - Docker') {
+        steps {
+           sh "mvn dependency-check:check"
+           }
+           post {
+             always {
+               dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+             }
+           }
       }
       stage('Docker build & push') {
          steps {
