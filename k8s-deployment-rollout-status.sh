@@ -4,7 +4,7 @@
 
 sleep 10s
 
-if [[ $(kubectl -n default rollout status deploy ${deploymentName} --timeout 5s) == "successfully rolled out" ]];
+if [[ $(kubectl -n default rollout status deploy ${deploymentName} --timeout 5s) == "deployment "devsecops" successfully rolled out" ]];
 then
 echo "Deployment ${deploymentName} Rollout is success"
 else
