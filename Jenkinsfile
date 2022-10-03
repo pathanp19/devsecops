@@ -6,7 +6,7 @@ pipeline {
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
     imageName = "pathanp19/devsecops-numeric-app:${GIT_COMMIT}"
-    applicationURL = "devsecops-demokhan.eastus.cloudapp.azure.com/"
+    applicationURL = "http://devsecops-demokhan.eastus.cloudapp.azure.com/"
     applicationURI = "/increment/99"
   }
 
@@ -67,12 +67,23 @@ pipeline {
         }
       }
     }
-    
-    stage ('vulnerability scan - kubernetes') {
+    stage('Vulnerability Scan - Kubernetes') {
       steps {
-            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+        parallel(
+          "OPA Scan": {
+            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml"
+          },
+          "Kubesec Scan": {
+             sh "bash kubesec-scan.sh"
+          }
+        )
       }
     }
+    // stage ('vulnerability scan - kubernetes') {
+    //  steps {
+    //        sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+    //  }
+    //}
     // stage('kubernetes deploy - dev') {
     //  steps {
     //    withKubeConfig([credentialsId: 'kubeconfig']) {
