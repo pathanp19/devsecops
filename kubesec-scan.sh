@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 #kubesec-scan.sh 
 
