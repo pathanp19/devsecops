@@ -31,18 +31,18 @@ pipeline {
         sh "mvn org.pitest:pitest-maven:mutationCoverage"
       }
     }
-    stage('Sonarqube SAST') {
-      steps {
-        withSonarQubeEnv('SonarQube') {
-          sh "mvn sonar:sonar -Dsonar.projectKey=numeric -Dsonar.host.url=http://devsecops-demokhan.eastus.cloudapp.azure.com:9000"
-        }
-        timeout(time: 2, unit: 'MINUTES') {
-          script {
-            waitForQualityGate abortPipeline: true
-          }
-        }
-      }
-    }
+    //stage('Sonarqube SAST') {
+    //  steps {
+    //    withSonarQubeEnv('SonarQube') {
+    //      sh "mvn sonar:sonar -Dsonar.projectKey=numeric -Dsonar.host.url=http://devsecops-demokhan.eastus.cloudapp.azure.com:9000"
+    //    }
+    //    timeout(time: 2, unit: 'MINUTES') {
+    //      script {
+    //        waitForQualityGate abortPipeline: true
+    //      }
+     //   }
+      //}
+    //}
 
     stage('Vulnerability Scan - Docker') {
       steps {
@@ -140,6 +140,23 @@ pipeline {
       steps {
         timeout(time: 2, unit: 'DAYS' ) {
           input 'Do you want to aprove the Deployment to production Environment/namespace?'
+        }
+      }
+    }
+    stage('K8s CIS benchmark') {
+      steps {
+        script {
+          parallel(
+            "Master": {
+               sh "bash cis-master.sh"
+            },
+            "Etcd": {
+               sh "bash cis-etcd.sh"
+            },
+            "kubelet": {
+               sh "bash cis-kubelet.sh"
+            }
+          )
         }
       }
     }
