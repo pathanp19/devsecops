@@ -179,7 +179,7 @@ pipeline {
     }
     stage('Integration Tests - PROD') {
       steps {
-        scripts {
+        script {
           try {
             withKubeConfig([credentialsId: "kubeconfig"]) {
               sh "bash integration-test-PROD.sh"
